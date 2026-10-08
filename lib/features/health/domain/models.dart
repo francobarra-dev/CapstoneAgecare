@@ -4,10 +4,17 @@ import 'package:flutter/material.dart';
 enum VitalType {
   heartRate('heart_rate', 'Ritmo cardíaco', 'bpm', Icons.favorite_rounded),
   spo2('spo2', 'Oxígeno (SpO2)', '%', Icons.air_rounded),
+  temperature('temperature', 'Temperatura', '°C', Icons.thermostat_rounded),
   sleep('sleep', 'Sueño', 'h', Icons.bedtime_rounded),
   steps('steps', 'Pasos', 'pasos', Icons.directions_walk_rounded),
   sedentaryMin('sedentary_min', 'Tiempo sedentario', 'min', Icons.chair_rounded),
   fallEvent('fall_event', 'Caídas', 'eventos', Icons.warning_rounded);
+
+  /// true para los 3 signos vitales "core" que se muestran siempre en Salud
+  /// (AGE-304): ritmo cardíaco, SpO2 y temperatura. El resto son datos de
+  /// actividad/sueño, que se agrupan aparte.
+  bool get isCoreVital =>
+      this == heartRate || this == spo2 || this == temperature;
 
   const VitalType(this.apiValue, this.label, this.unit, this.icon);
 
@@ -117,6 +124,8 @@ class LatestVital {
         final h = value.floor();
         final m = ((value - h) * 60).round();
         return '${h}h ${m.toString().padLeft(2, '0')}m';
+      case VitalType.temperature:
+        return value.toStringAsFixed(1);
       default:
         return value.toStringAsFixed(0);
     }

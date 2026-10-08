@@ -73,9 +73,14 @@ class VitalDetailScreen extends ConsumerWidget {
                       child: Column(
                         children: [
                           Expanded(child: _TrendChart(series: data)),
+                          if (data.points.any((p) => p.min != null && p.max != null))
+                            const Padding(
+                              padding: EdgeInsets.only(top: 8),
+                              child: _MinMaxLegend(),
+                            ),
                           if (data.threshold != null)
                             Padding(
-                              padding: const EdgeInsets.only(top: 12),
+                              padding: const EdgeInsets.only(top: 8),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
@@ -110,6 +115,30 @@ class VitalDetailScreen extends ConsumerWidget {
   }
 }
 
+/// Leyenda de las lineas punteadas de minimo/maximo diario del grafico
+/// (AGE-304 / AC: "...mostrando minimos y maximos").
+class _MinMaxLegend extends StatelessWidget {
+  const _MinMaxLegend();
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        for (var i = 0; i < 3; i++) ...[
+          Container(width: 5, height: 2, color: AppColors.textSecondary.withOpacity(.6)),
+          if (i < 2) const SizedBox(width: 3),
+        ],
+        const SizedBox(width: 6),
+        const Text(
+          'Líneas punteadas: mínimo y máximo del día',
+          style: TextStyle(fontSize: 12, color: AppColors.textSecondary),
+        ),
+      ],
+    );
+  }
+}
+
 class _TrendChart extends StatelessWidget {
   const _TrendChart({required this.series});
 
@@ -122,9 +151,23 @@ class _TrendChart extends StatelessWidget {
       for (var i = 0; i < points.length; i++) FlSpot(i.toDouble(), points[i].value)
     ];
 
+    final hasMinMax = points.any((p) => p.min != null && p.max != null);
+    final minSpots = <FlSpot>[
+      for (var i = 0; i < points.length; i++)
+        if (points[i].min != null) FlSpot(i.toDouble(), points[i].min!)
+    ];
+    final maxSpots = <FlSpot>[
+      for (var i = 0; i < points.length; i++)
+        if (points[i].max != null) FlSpot(i.toDouble(), points[i].max!)
+    ];
+
     final values = points.map((p) => p.value);
     var minY = values.reduce((a, b) => a < b ? a : b);
     var maxY = values.reduce((a, b) => a > b ? a : b);
+    for (final p in points) {
+      if (p.min != null && p.min! < minY) minY = p.min!;
+      if (p.max != null && p.max! > maxY) maxY = p.max!;
+    }
     final t = series.threshold;
     if (t?.minValue != null && t!.minValue! < minY) minY = t.minValue!;
     if (t?.maxValue != null && t!.maxValue! > maxY) maxY = t.maxValue!;
@@ -180,6 +223,26 @@ class _TrendChart extends StatelessWidget {
                 dashArray: [6, 4]),
         ]),
         lineBarsData: [
+          if (hasMinMax) ...[
+            LineChartBarData(
+              spots: minSpots,
+              isCurved: true,
+              curveSmoothness: .25,
+              color: AppColors.textSecondary.withOpacity(.6),
+              barWidth: 1,
+              dotData: const FlDotData(show: false),
+              dashArray: [4, 3],
+            ),
+            LineChartBarData(
+              spots: maxSpots,
+              isCurved: true,
+              curveSmoothness: .25,
+              color: AppColors.textSecondary.withOpacity(.6),
+              barWidth: 1,
+              dotData: const FlDotData(show: false),
+              dashArray: [4, 3],
+            ),
+          ],
           LineChartBarData(
             spots: spots,
             isCurved: true,

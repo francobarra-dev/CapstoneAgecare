@@ -99,6 +99,7 @@ class VitalsRepositoryMock implements VitalsRepository {
   static const _thresholds = [
     Threshold(type: VitalType.heartRate, minValue: 50, maxValue: 110),
     Threshold(type: VitalType.spo2, minValue: 92),
+    Threshold(type: VitalType.temperature, minValue: 36.1, maxValue: 37.2),
   ];
 
   Random _rng(String patientId, VitalType type) =>
@@ -110,6 +111,8 @@ class VitalsRepositoryMock implements VitalsRepository {
         return 72;
       case VitalType.spo2:
         return 96;
+      case VitalType.temperature:
+        return 36.6;
       case VitalType.sleep:
         return 6.8;
       case VitalType.steps:
@@ -127,12 +130,36 @@ class VitalsRepositoryMock implements VitalsRepository {
         return rng.nextDouble() * 14 - 7;
       case VitalType.spo2:
         return rng.nextDouble() * 3 - 1.5;
+      case VitalType.temperature:
+        return rng.nextDouble() * 0.8 - 0.4;
       case VitalType.sleep:
         return rng.nextDouble() * 2.4 - 1.2;
       case VitalType.steps:
         return rng.nextDouble() * 2400 - 1200;
       case VitalType.sedentaryMin:
         return rng.nextDouble() * 120 - 60;
+      case VitalType.fallEvent:
+        return 0;
+    }
+  }
+
+  /// Media banda de variacion diaria (min/max) alrededor del valor, para que
+  /// la grafica de tendencia pueda mostrar minimos y maximos (AGE-304).
+  /// Proporcional al tipo de vital para que se vea razonable en el grafico.
+  double _dailySpread(VitalType type) {
+    switch (type) {
+      case VitalType.heartRate:
+        return 10;
+      case VitalType.spo2:
+        return 2;
+      case VitalType.temperature:
+        return 0.3;
+      case VitalType.sleep:
+        return 0.6;
+      case VitalType.steps:
+        return 600;
+      case VitalType.sedentaryMin:
+        return 40;
       case VitalType.fallEvent:
         return 0;
     }
@@ -161,11 +188,14 @@ class VitalsRepositoryMock implements VitalsRepository {
       final day = from.add(Duration(days: i));
       final value =
           (_baseline(type) + _jitter(type, rng)).clamp(0, double.infinity);
+      final spread = _dailySpread(type);
       points.add(VitalPoint(
         ts: day,
         value: double.parse(value.toStringAsFixed(1)),
-        min: type == VitalType.heartRate ? value - 8 : null,
-        max: type == VitalType.heartRate ? value + 12 : null,
+        min: spread > 0
+            ? double.parse((value - spread).clamp(0, double.infinity).toStringAsFixed(1))
+            : null,
+        max: spread > 0 ? double.parse((value + spread).toStringAsFixed(1)) : null,
       ));
     }
     Threshold? threshold;
@@ -191,6 +221,10 @@ class VitalsRepositoryMock implements VitalsRepository {
           value: lowSpo2 ? 91 : 97,
           measuredAt: now.subtract(const Duration(minutes: 12)),
           inRange: !lowSpo2),
+      LatestVital(
+          type: VitalType.temperature,
+          value: 36.7,
+          measuredAt: now.subtract(const Duration(minutes: 12))),
       LatestVital(
           type: VitalType.sleep,
           value: 6.5,
