@@ -9,11 +9,12 @@ class AppConfig {
 
   /// true = repositorios en memoria con datos demo (no requiere backend).
   static const bool useMocks =
-      bool.fromEnvironment('USE_MOCKS', defaultValue: true);
+      bool.fromEnvironment('USE_MOCKS', defaultValue: false);
 
   static const String apiBaseUrl = String.fromEnvironment(
     'API_BASE_URL',
-    defaultValue: 'https://api-dev.agecare.app',
+    // defaultValue: 'https://api-dev.agecare.app', // (Endpoint de produccion)
+    defaultValue: 'https://agecare.open-cluster.org', // (Endpoint desarrollo)
   );
 
   /// Application ID de Spike API (https://docs.spikeapi.com).
