@@ -209,22 +209,28 @@ class VitalsRepositoryMock implements VitalsRepository {
   Future<List<LatestVital>> getLatest(String patientId) async {
     await Future.delayed(const Duration(milliseconds: 250));
     final now = DateTime.now();
-    // 'p-jose' simula SpO2 baja para demo del semáforo warning.
+    // 'p-jose' simula SpO2 baja para demostrar el indicador de fuera de
+    // rango (AC1).
     final lowSpo2 = patientId == 'p-jose';
+    const hrValue = 74.0;
+    final spo2Value = lowSpo2 ? 91.0 : 97.0;
+    const tempValue = 36.7;
     return [
       LatestVital(
           type: VitalType.heartRate,
-          value: 74,
-          measuredAt: now.subtract(const Duration(minutes: 12))),
+          value: hrValue,
+          measuredAt: now.subtract(const Duration(minutes: 12)),
+          inRange: _inRange(VitalType.heartRate, hrValue)),
       LatestVital(
           type: VitalType.spo2,
-          value: lowSpo2 ? 91 : 97,
+          value: spo2Value,
           measuredAt: now.subtract(const Duration(minutes: 12)),
-          inRange: !lowSpo2),
+          inRange: _inRange(VitalType.spo2, spo2Value)),
       LatestVital(
           type: VitalType.temperature,
-          value: 36.7,
-          measuredAt: now.subtract(const Duration(minutes: 12))),
+          value: tempValue,
+          measuredAt: now.subtract(const Duration(minutes: 12)),
+          inRange: _inRange(VitalType.temperature, tempValue)),
       LatestVital(
           type: VitalType.sleep,
           value: 6.5,
@@ -234,6 +240,16 @@ class VitalsRepositoryMock implements VitalsRepository {
           value: 2840,
           measuredAt: now.subtract(const Duration(minutes: 30))),
     ];
+  }
+
+  /// Compara un valor contra el umbral médico normal del tipo (AC1:
+  /// "...indicadores de estado según rangos médicos normales"). Sin
+  /// umbral definido para el tipo, se asume en rango (ej. sueño, pasos).
+  bool _inRange(VitalType type, double value) {
+    for (final t in _thresholds) {
+      if (t.type == type) return !t.isOutOfRange(value);
+    }
+    return true;
   }
 
   @override
