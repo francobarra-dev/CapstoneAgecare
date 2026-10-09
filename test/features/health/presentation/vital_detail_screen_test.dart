@@ -106,7 +106,7 @@ void main() {
         home: const VitalDetailScreen(typeApiValue: 'heart_rate'),
       ),
     ));
-    await tester.pumpAndSettle();
+    await tester.pumpAndSettle(const Duration(milliseconds: 500));
     return repo;
   }
 
@@ -128,11 +128,11 @@ void main() {
     expect(repo.requestedDays.last, 7);
 
     await tester.tap(find.text('30 días'));
-    await tester.pumpAndSettle();
+    await tester.pumpAndSettle(const Duration(milliseconds: 500));
     expect(repo.requestedDays.last, 30);
 
     await tester.tap(find.text('90 días'));
-    await tester.pumpAndSettle();
+    await tester.pumpAndSettle(const Duration(milliseconds: 500));
     expect(repo.requestedDays.last, 90);
 
     // Sigue mostrando mínimos y máximos tras el cambio de rango.
@@ -140,7 +140,7 @@ void main() {
         find.text('Líneas punteadas: mínimo y máximo del día'), findsOneWidget);
 
     await tester.tap(find.text('7 días'));
-    await tester.pumpAndSettle();
+    await tester.pumpAndSettle(const Duration(milliseconds: 500));
     expect(repo.requestedDays.last, 7);
   });
 }

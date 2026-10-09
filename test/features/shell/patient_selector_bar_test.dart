@@ -76,7 +76,7 @@ void main() {
       overrides: [patientsRepositoryProvider.overrideWithValue(repo)],
       child: MaterialApp(theme: AppTheme.light(), home: const _Harness()),
     ));
-    await tester.pumpAndSettle();
+    await tester.pumpAndSettle(const Duration(milliseconds: 500));
   }
 
   testWidgets(
@@ -90,7 +90,7 @@ void main() {
 
     // Tocar la barra no debe abrir ningún selector.
     await tester.tap(find.byKey(const Key('patientSelectorBar_tap')));
-    await tester.pumpAndSettle();
+    await tester.pumpAndSettle(const Duration(milliseconds: 500));
     expect(find.text('Cambiar de paciente'), findsNothing);
   });
 
@@ -104,7 +104,7 @@ void main() {
     expect(find.byIcon(Icons.expand_more_rounded), findsOneWidget);
 
     await tester.tap(find.byKey(const Key('patientSelectorBar_tap')));
-    await tester.pumpAndSettle();
+    await tester.pumpAndSettle(const Duration(milliseconds: 500));
 
     // Se ve la lista completa de pacientes vinculados.
     expect(find.text('Cambiar de paciente'), findsOneWidget);
@@ -115,7 +115,7 @@ void main() {
 
     // 1 toque sobre José cambia el contexto activo.
     await tester.tap(find.byKey(const Key('patientSelectorBar_option_p-jose')));
-    await tester.pumpAndSettle();
+    await tester.pumpAndSettle(const Duration(milliseconds: 500));
 
     expect(find.text('José Ramírez'), findsOneWidget);
     expect(find.text('Elena Ramírez'), findsNothing);
@@ -130,9 +130,9 @@ void main() {
     expect(find.text('detalle:Elena Ramírez'), findsOneWidget);
 
     await tester.tap(find.byKey(const Key('patientSelectorBar_tap')));
-    await tester.pumpAndSettle();
+    await tester.pumpAndSettle(const Duration(milliseconds: 500));
     await tester.tap(find.byKey(const Key('patientSelectorBar_option_p-jose')));
-    await tester.pumpAndSettle();
+    await tester.pumpAndSettle(const Duration(milliseconds: 500));
 
     // Sin invalidar nada a mano: selectedPatientDetailProvider observa
     // selectedPatientProvider y se reconstruyó solo con el nuevo paciente.

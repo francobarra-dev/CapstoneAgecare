@@ -31,7 +31,7 @@ void main() {
       child: MaterialApp(
           theme: AppTheme.light(), home: const Scaffold(body: HealthScreen())),
     ));
-    await tester.pumpAndSettle();
+    await tester.pumpAndSettle(const Duration(milliseconds: 500));
 
     expect(find.text('Vitales'), findsOneWidget);
     expect(find.text('Actividad'), findsOneWidget);
@@ -60,7 +60,7 @@ void main() {
       child: MaterialApp(
           theme: AppTheme.light(), home: const Scaffold(body: HealthScreen())),
     ));
-    await tester.pumpAndSettle();
+    await tester.pumpAndSettle(const Duration(milliseconds: 500));
 
     // Elena (auto-seleccionada, 1era de la lista) no simula valores fuera
     // de rango.
@@ -97,10 +97,10 @@ void main() {
         }),
       ),
     ));
-    await tester.pumpAndSettle();
+    await tester.pumpAndSettle(const Duration(milliseconds: 500));
 
     await tester.tap(find.byKey(const Key('switchPatient')));
-    await tester.pumpAndSettle();
+    await tester.pumpAndSettle(const Duration(milliseconds: 500));
 
     // 'p-jose' simula SpO2 91 (bajo el mínimo normal de 92): debe verse el
     // ícono de alerta en su tarjeta, sin refrescar nada a mano (el provider
