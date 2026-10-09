@@ -84,7 +84,13 @@ void main() {
       overrides: [patientsRepositoryProvider.overrideWithValue(repo)],
       child: MaterialApp(theme: AppTheme.light(), home: const _Harness()),
     ));
-    await tester.pumpAndSettle(const Duration(milliseconds: 1000));
+    // Pumps explicitos en vez de un solo pumpAndSettle: el auto-select de
+    // myPatientsProvider dispara, en cascada, otro Future.delayed en
+    // selectedPatientDetailProvider.getPatient(), y pumpAndSettle no
+    // siempre alcanza a esperar ambos saltos de forma confiable aqui.
+    await tester.pump();
+    await tester.pump(const Duration(seconds: 1));
+    await tester.pump(const Duration(seconds: 1));
   }
 
   testWidgets(
