@@ -82,7 +82,7 @@ class VitalReading {
         unit: json['unit'] as String?,
         iconKey: json['icon'] as String?,
         measuredAt: json['measured_at'] != null
-            ? DateTime.parse(json['measured_at'] as String)
+            ? DateTime.parse(json['measured_at'] as String).toLocal()
             : null,
         inRange: (json['in_range'] ?? true) as bool,
       );

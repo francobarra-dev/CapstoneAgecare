@@ -47,6 +47,9 @@ app.*.map.json
 /android/.flutter_plugin_loader
 /.gradle_home
 
+# Cache del compilador Kotlin (generado al compilar/correr en un emulador)
+/android/.kotlin/
+
 # Widget Preview related
 .widget_preview/
 

@@ -19,7 +19,7 @@ class WearableStatus {
   factory WearableStatus.fromJson(Map<String, dynamic> json) => WearableStatus(
         wearableId: json['wearable_id'] as String?,
         lastSyncAt: json['last_sync_at'] != null
-            ? DateTime.parse(json['last_sync_at'] as String)
+            ? DateTime.parse(json['last_sync_at'] as String).toLocal()
             : null,
         batteryPct: json['battery_pct'] as int?,
         isStale: (json['is_stale'] ?? false) as bool,
@@ -152,7 +152,7 @@ class Invitation {
         invitationId: json['invitation_id'] as String,
         code: json['code'] as String,
         role: RoleType.fromApi(json['role'] as String),
-        expiresAt: DateTime.parse(json['expires_at'] as String),
+        expiresAt: DateTime.parse(json['expires_at'] as String).toLocal(),
       );
 }
 

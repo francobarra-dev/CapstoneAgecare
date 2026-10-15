@@ -122,11 +122,11 @@ class Alert {
         severity: AlertSeverity.fromApi((json['severity'] ?? 'info') as String),
         title: (json['title'] ?? '') as String,
         message: (json['message'] ?? '') as String,
-        createdAt: DateTime.parse(json['created_at'] as String),
+        createdAt: DateTime.parse(json['created_at'] as String).toLocal(),
         status: AlertStatus.fromApi((json['status'] ?? 'active') as String),
         acknowledgedBy: json['acknowledged_by'] as String?,
         resolvedAt: json['resolved_at'] != null
-            ? DateTime.parse(json['resolved_at'] as String)
+            ? DateTime.parse(json['resolved_at'] as String).toLocal()
             : null,
         meta: json['meta'] as Map<String, dynamic>?,
       );

@@ -30,12 +30,15 @@ class _SinglePatientRepo implements PatientsRepository {
   @override
   Future<List<PatientCard>> listMyPatients() async => const [_only];
 
+  // El harness compartido observa selectedPatientDetailProvider, que llama
+  // getPatient() en cuanto se auto-selecciona el unico paciente, asi que
+  // este stub debe devolver datos reales en vez de lanzar (antes lanzaba
+  // UnimplementedError y Riverpod lo reportaba como excepcion inesperada).
   @override
   Future<Patient> getPatient(String patientId) async => Patient(
-        patientId: 'p-unico',
-        fullName: 'Mario Soto',
+        patientId: _only.patientId,
+        fullName: _only.fullName,
         birthDate: DateTime(1950, 1, 1),
-        sex: 'male',
       );
 
   @override
@@ -97,8 +100,13 @@ void main() {
       overrides: [patientsRepositoryProvider.overrideWithValue(repo)],
       child: MaterialApp(theme: AppTheme.light(), home: const _Harness()),
     ));
-    await tester.pump(const Duration(seconds: 2));
-    await tester.pumpAndSettle();
+    // Pumps explicitos en vez de un solo pumpAndSettle: el auto-select de
+    // myPatientsProvider dispara, en cascada, otro Future.delayed en
+    // selectedPatientDetailProvider.getPatient(), y pumpAndSettle no
+    // siempre alcanza a esperar ambos saltos de forma confiable aqui.
+    await tester.pump();
+    await tester.pump(const Duration(seconds: 1));
+    await tester.pump(const Duration(seconds: 1));
   }
 
   testWidgets(
@@ -112,7 +120,7 @@ void main() {
 
     // Tocar la barra no debe abrir ningún selector.
     await tester.tap(find.byKey(const Key('patientSelectorBar_tap')));
-    await tester.pumpAndSettle();
+    await tester.pumpAndSettle(const Duration(milliseconds: 1000));
     expect(find.text('Cambiar de paciente'), findsNothing);
   });
 
@@ -126,7 +134,7 @@ void main() {
     expect(find.byIcon(Icons.expand_more_rounded), findsOneWidget);
 
     await tester.tap(find.byKey(const Key('patientSelectorBar_tap')));
-    await tester.pumpAndSettle();
+    await tester.pumpAndSettle(const Duration(milliseconds: 1000));
 
     // Se ve la lista completa de pacientes vinculados.
     expect(find.text('Cambiar de paciente'), findsOneWidget);
@@ -137,7 +145,7 @@ void main() {
 
     // 1 toque sobre José cambia el contexto activo.
     await tester.tap(find.byKey(const Key('patientSelectorBar_option_p-jose')));
-    await tester.pumpAndSettle();
+    await tester.pumpAndSettle(const Duration(milliseconds: 1000));
 
     expect(find.text('José Ramírez'), findsOneWidget);
     expect(find.text('Elena Ramírez'), findsNothing);
@@ -153,10 +161,9 @@ void main() {
     expect(find.text('detalle:Elena Ramírez'), findsOneWidget);
 
     await tester.tap(find.byKey(const Key('patientSelectorBar_tap')));
-    await tester.pumpAndSettle();
+    await tester.pumpAndSettle(const Duration(milliseconds: 1000));
     await tester.tap(find.byKey(const Key('patientSelectorBar_option_p-jose')));
-    await tester.pumpAndSettle();
-    await tester.pump(const Duration(seconds: 1));
+    await tester.pumpAndSettle(const Duration(milliseconds: 1000));
 
     // Sin invalidar nada a mano: selectedPatientDetailProvider observa
     // selectedPatientProvider y se reconstruyó solo con el nuevo paciente.

@@ -58,18 +58,52 @@ class HealthScreen extends ConsumerWidget {
               orElse: () => const SizedBox.shrink(),
             ),
             const SizedBox(height: 12),
-            ...vitals.map((v) => Padding(
-                  padding: const EdgeInsets.only(bottom: 12),
-                  child: _VitalCard(vital: v),
-                )),
             if (vitals.isEmpty)
               const EmptyView(
                   icon: Icons.watch_outlined,
                   title: 'Aún no hay lecturas',
                   subtitle:
-                      'Cuando el wearable sincronice, verás aquí los vitals con sus tendencias.'),
+                      'Cuando el wearable sincronice, verás aquí los vitals con sus tendencias.')
+            else ...[
+              _VitalGroup(
+                title: 'Vitales',
+                vitals: vitals.where((v) => v.type.isCoreVital).toList(),
+              ),
+              _VitalGroup(
+                title: 'Actividad',
+                vitals: vitals.where((v) => !v.type.isCoreVital).toList(),
+              ),
+            ],
           ],
         ),
+      ),
+    );
+  }
+}
+
+/// Grupo de tarjetas de vitals con encabezado (AGE-304 / DAC05-60).
+/// No se dibuja si no hay vitals de ese grupo para el paciente.
+class _VitalGroup extends StatelessWidget {
+  const _VitalGroup({required this.title, required this.vitals});
+
+  final String title;
+  final List<LatestVital> vitals;
+
+  @override
+  Widget build(BuildContext context) {
+    if (vitals.isEmpty) return const SizedBox.shrink();
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(title, style: Theme.of(context).textTheme.titleMedium),
+          const SizedBox(height: 8),
+          ...vitals.map((v) => Padding(
+                padding: const EdgeInsets.only(bottom: 12),
+                child: _VitalCard(vital: v),
+              )),
+        ],
       ),
     );
   }

@@ -24,7 +24,7 @@ class PatientDocument {
         category: (json['category'] ?? 'general') as String,
         fileUrl: json['file_url'] as String,
         createdAt: json['created_at'] != null
-            ? DateTime.parse(json['created_at'] as String)
+            ? DateTime.parse(json['created_at'] as String).toLocal()
             : DateTime.now(),
         uploaderName: json['uploader_name'] as String?,
       );
