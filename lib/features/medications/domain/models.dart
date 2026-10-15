@@ -161,10 +161,10 @@ class Dose {
         id: (json['id'] ?? json['dose_id']).toString(),
         medicationId: (json['medication_id'] ?? '').toString(),
         medicationName: (json['medication_name'] ?? '') as String,
-        scheduledAt: DateTime.parse(json['scheduled_at'] as String),
+        scheduledAt: DateTime.parse(json['scheduled_at'] as String).toLocal(),
         status: DoseStatus.fromApi((json['status'] ?? 'pending') as String),
         loggedAt: json['logged_at'] != null
-            ? DateTime.parse(json['logged_at'] as String)
+            ? DateTime.parse(json['logged_at'] as String).toLocal()
             : null,
         dose: json['dose']?.toString(),
         unit: json['unit']?.toString(),

@@ -123,7 +123,7 @@ class Review {
         rating: (json['rating'] ?? 0) as int,
         comment: (json['comment'] ?? '') as String,
         createdAt: json['created_at'] != null
-            ? DateTime.parse(json['created_at'] as String)
+            ? DateTime.parse(json['created_at'] as String).toLocal()
             : DateTime.now(),
       );
 }

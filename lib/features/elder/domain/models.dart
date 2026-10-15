@@ -35,7 +35,7 @@ class FamilyPhoto {
         url: (json['url'] ?? json['file_url'] ?? '') as String,
         caption: json['caption'] as String?,
         fromName: (json['from_name'] ?? 'Tu familia') as String,
-        createdAt: DateTime.parse(json['created_at'] as String),
+        createdAt: DateTime.parse(json['created_at'] as String).toLocal(),
         reactions: (json['reactions'] as Map?)?.map(
           (k, v) => MapEntry(k.toString(), (v as num).toInt()),
         ),

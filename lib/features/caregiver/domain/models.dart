@@ -107,7 +107,7 @@ class CareTask {
         id: (json['id'] ?? json['task_id']).toString(),
         title: (json['title'] ?? '') as String,
         description: json['description'] as String?,
-        due: json['due'] != null ? DateTime.parse(json['due'] as String) : null,
+        due: json['due'] != null ? DateTime.parse(json['due'] as String).toLocal() : null,
         status: TaskStatus.fromApi((json['status'] ?? 'pending') as String),
         category: json['category'] as String?,
       );
@@ -217,7 +217,7 @@ class Observation {
         category: json['category'] as String?,
         mediaUrl: json['media_url'] as String?,
         createdAt: json['created_at'] != null
-            ? DateTime.parse(json['created_at'] as String)
+            ? DateTime.parse(json['created_at'] as String).toLocal()
             : DateTime.now(),
         authorName: (json['author_name'] ?? '') as String,
       );
@@ -246,7 +246,7 @@ class HandoverNote {
         text: (json['text'] ?? '') as String,
         authorName: (json['author_name'] ?? '') as String,
         createdAt: json['created_at'] != null
-            ? DateTime.parse(json['created_at'] as String)
+            ? DateTime.parse(json['created_at'] as String).toLocal()
             : DateTime.now(),
       );
 }

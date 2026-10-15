@@ -57,7 +57,7 @@ class VitalPoint {
   final double? max;
 
   factory VitalPoint.fromJson(Map<String, dynamic> json) => VitalPoint(
-        ts: DateTime.parse(json['ts'] as String),
+        ts: DateTime.parse(json['ts'] as String).toLocal(),
         value: (json['value'] as num).toDouble(),
         min: (json['min'] as num?)?.toDouble(),
         max: (json['max'] as num?)?.toDouble(),
@@ -110,7 +110,7 @@ class LatestVital {
   factory LatestVital.fromJson(Map<String, dynamic> json) => LatestVital(
         type: VitalType.fromApi(json['type'] as String),
         value: (json['value'] as num).toDouble(),
-        measuredAt: DateTime.parse(json['measured_at'] as String),
+        measuredAt: DateTime.parse(json['measured_at'] as String).toLocal(),
         inRange: (json['in_range'] ?? true) as bool,
       );
 

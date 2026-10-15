@@ -58,7 +58,7 @@ class ChatMessage {
         type: MessageType.fromApi((json['type'] ?? 'text') as String),
         text: json['text'] as String?,
         mediaUrl: json['media_url'] as String?,
-        createdAt: DateTime.parse(json['created_at'] as String),
+        createdAt: DateTime.parse(json['created_at'] as String).toLocal(),
         readBy: json['read_by'] != null
             ? ((json['read_by'] as List).map((e) => e.toString()).toList())
             : null,
@@ -141,7 +141,7 @@ class AssistantMessage {
         id: json['id'] as String,
         role: AssistantRole.fromApi((json['role'] ?? 'assistant') as String),
         text: (json['text'] ?? '') as String,
-        createdAt: DateTime.parse(json['created_at'] as String),
+        createdAt: DateTime.parse(json['created_at'] as String).toLocal(),
         citations: json['citations'] != null
             ? ((json['citations'] as List)
                 .map((e) => Citation.fromJson(e as Map<String, dynamic>))
@@ -175,7 +175,7 @@ class AssistantConversation {
       AssistantConversation(
         id: json['id'] as String,
         title: (json['title'] ?? 'Conversación') as String,
-        updatedAt: DateTime.parse(json['updated_at'] as String),
+        updatedAt: DateTime.parse(json['updated_at'] as String).toLocal(),
       );
 
   Map<String, dynamic> toJson() => {
