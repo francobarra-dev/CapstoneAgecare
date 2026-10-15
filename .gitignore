@@ -21,7 +21,8 @@ migrate_working_dir/
 # The .vscode folder contains launch configuration and tasks you configure in
 # VS Code which you may wish to be included in version control, so this line
 # is commented out by default.
-#.vscode/
+.vscode/
+.agents/
 
 # Flutter/Dart/Pub related
 **/doc/api/
@@ -43,9 +44,26 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+/android/.flutter_plugin_loader
+/.gradle_home
 
 # Cache del compilador Kotlin (generado al compilar/correr en un emulador)
 /android/.kotlin/
 
 # Widget Preview related
 .widget_preview/
+
+# Nix related
+shell.nix
+flake.nix
+flake.lock
+.direnv
+.envrc
+.flutter_sdk
+linux
+web
+
+# Android Release Signing Keys
+**/android/key.properties
+*.jks
+*.keystore

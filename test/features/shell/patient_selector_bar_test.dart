@@ -56,6 +56,22 @@ class _SinglePatientRepo implements PatientsRepository {
   @override
   Future<WearableStatus> wearableStatus(String patientId) =>
       throw UnimplementedError();
+
+  @override
+  Future<List<CircleMember>> listCircleMembers(String patientId) =>
+      throw UnimplementedError();
+
+  @override
+  Future<Invitation> resendInvitation(String patientId, String memberId) =>
+      throw UnimplementedError();
+
+  @override
+  Future<void> revokeInvitation(String patientId, String memberId) =>
+      throw UnimplementedError();
+
+  @override
+  Future<void> revokeMember(String patientId, String memberId) =>
+      throw UnimplementedError();
 }
 
 /// Monta la barra junto con [selectedPatientDetailProvider] visible, para
@@ -139,6 +155,7 @@ void main() {
       'al cambiar de paciente activo, los providers que dependen de el refrescan solos sus datos',
       (tester) async {
     await pumpHarness(tester, PatientsRepositoryMock());
+    await tester.pump(const Duration(seconds: 1));
 
     // selectedPatientDetailProvider ya cargó el detalle de Elena (1er paciente).
     expect(find.text('detalle:Elena Ramírez'), findsOneWidget);
