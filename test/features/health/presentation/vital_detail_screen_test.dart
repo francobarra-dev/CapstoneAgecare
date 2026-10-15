@@ -47,6 +47,23 @@ class _SinglePatientRepo implements PatientsRepository {
   @override
   Future<WearableStatus> wearableStatus(String patientId) =>
       throw UnimplementedError();
+
+  @override
+  Future<List<CircleMember>> listCircleMembers(String patientId) =>
+      throw UnimplementedError();
+
+  @override
+  Future<Invitation> resendInvitation(
+          String patientId, String invitationId) =>
+      throw UnimplementedError();
+
+  @override
+  Future<void> revokeInvitation(String patientId, String invitationId) =>
+      throw UnimplementedError();
+
+  @override
+  Future<void> revokeMember(String patientId, String memberId) =>
+      throw UnimplementedError();
 }
 
 /// Repositorio de vitals que registra el rango (en días) solicitado en cada
