@@ -162,7 +162,7 @@ class _PrescriptionScanScreenState
                         icon: const Icon(Icons.photo_library_rounded),
                         label: const Text('Galería'),
                         style: OutlinedButton.styleFrom(
-                            minimumSize: const Size.fromHeight(52)),
+                            minimumSize: const Size(0, 52)),
                       ),
                     ),
                   ],

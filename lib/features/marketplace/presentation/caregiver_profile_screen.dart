@@ -119,7 +119,7 @@ class CaregiverProfileScreen extends ConsumerWidget {
                       icon: const Icon(Icons.rate_review_outlined),
                       label: const Text('Dejar reseña'),
                       style: OutlinedButton.styleFrom(
-                          minimumSize: const Size.fromHeight(52)),
+                          minimumSize: const Size(0, 52)),
                     ),
                   ),
                 ],

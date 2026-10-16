@@ -188,7 +188,7 @@ class _IncidentScreenState extends ConsumerState<IncidentScreen> {
                     icon: const Icon(Icons.photo_camera_rounded),
                     label: const Text('Cámara'),
                     style: OutlinedButton.styleFrom(
-                        minimumSize: const Size.fromHeight(52)),
+                        minimumSize: const Size(0, 52)),
                   ),
                 ),
                 const SizedBox(width: 12),
@@ -199,7 +199,7 @@ class _IncidentScreenState extends ConsumerState<IncidentScreen> {
                     icon: const Icon(Icons.photo_library_rounded),
                     label: const Text('Galería'),
                     style: OutlinedButton.styleFrom(
-                        minimumSize: const Size.fromHeight(52)),
+                        minimumSize: const Size(0, 52)),
                   ),
                 ),
               ],

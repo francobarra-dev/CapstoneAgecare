@@ -295,7 +295,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
       appBar: AppBar(
         title: const Text('Equipo de cuidado'),
         bottom: const PreferredSize(
-          preferredSize: Size.fromHeight(1),
+          preferredSize: const Size(0, 1),
           child: Divider(height: 1),
         ),
       ),

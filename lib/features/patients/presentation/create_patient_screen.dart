@@ -109,7 +109,7 @@ class _CreatePatientScreenState extends ConsumerState<CreatePatientScreen> {
                   icon: const Icon(Icons.cake_outlined),
                   label: Align(alignment: Alignment.centerLeft, child: Text(dateLabel)),
                   style: OutlinedButton.styleFrom(
-                    minimumSize: const Size.fromHeight(52),
+                    minimumSize: const Size(0, 52),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
                     foregroundColor: _birthDate == null
                         ? AppColors.textSecondary

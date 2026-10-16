@@ -8,6 +8,7 @@ import '../../features/auth/presentation/login_screen.dart';
 import '../../features/auth/presentation/register_screen.dart';
 import '../../features/alerts/presentation/alerts_screen.dart';
 import '../../features/alerts/presentation/alert_detail_screen.dart';
+import '../../features/alerts/presentation/medication_alarms_screen.dart';
 import '../../features/caregiver/presentation/checkin_screen.dart';
 import '../../features/caregiver/presentation/handover_screen.dart';
 import '../../features/caregiver/presentation/incident_screen.dart';
@@ -18,8 +19,10 @@ import '../../features/comms/presentation/assistant_screen.dart';
 import '../../features/comms/presentation/chat_screen.dart';
 import '../../features/documents/presentation/documents_screen.dart';
 import '../../features/health/presentation/vital_detail_screen.dart';
+import '../../features/health/presentation/manual_vitals_screen.dart';
 import '../../features/marketplace/presentation/caregiver_profile_screen.dart';
 import '../../features/marketplace/presentation/marketplace_screen.dart';
+import '../../features/medications/presentation/agenda_screen.dart';
 import '../../features/medications/presentation/dose_confirm_screen.dart';
 import '../../features/medications/presentation/medication_plan_screen.dart';
 import '../../features/medications/presentation/prescription_scan_screen.dart';
@@ -76,6 +79,11 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         builder: (_, st) =>
             VitalDetailScreen(typeApiValue: st.pathParameters['type']!),
       ),
+      // Ingreso manual de signos vitales (DAC05-12).
+      GoRoute(
+        path: '/health/vitals/manual',
+        builder: (_, __) => const ManualVitalsScreen(),
+      ),
       GoRoute(
         path: '/wearable/link/:patientId',
         builder: (_, st) =>
@@ -100,6 +108,17 @@ final goRouterProvider = Provider<GoRouter>((ref) {
           medicationId: st.uri.queryParameters['medication'],
         ),
       ),
+      // Agenda de tomas del día (DAC05-14): lista de dosis con cuenta
+      // regresiva y bloqueo de posponer >4h.
+      GoRoute(
+        path: '/meds/agenda',
+        builder: (_, __) => const AgendaScreen(),
+      ),
+      // Pantalla de adherencia al tratamiento (DAC05-15).
+      GoRoute(
+        path: '/meds/adherence',
+        builder: (_, __) => const AdherenceScreen(),
+      ),
       GoRoute(
         path: '/meds/scan',
         builder: (_, st) =>
@@ -115,6 +134,11 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/alerts/:id',
         builder: (_, st) => AlertDetailScreen(alertId: st.pathParameters['id']!),
+      ),
+      // Alarmas específicas de medicación (DAC05-16).
+      GoRoute(
+        path: '/alerts/medication',
+        builder: (_, __) => const MedicationAlarmsScreen(),
       ),
 
       // --- Comunicación ---

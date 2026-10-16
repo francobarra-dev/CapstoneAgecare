@@ -133,7 +133,7 @@ class _DoseConfirmBodyState extends ConsumerState<_DoseConfirmBody> {
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
             style: FilledButton.styleFrom(
               backgroundColor: AppColors.statusOk,
-              minimumSize: const Size.fromHeight(72),
+              minimumSize: const Size(0, 72),
             ),
           ),
           const SizedBox(height: 16),
@@ -143,7 +143,7 @@ class _DoseConfirmBodyState extends ConsumerState<_DoseConfirmBody> {
             label: const Text('Omitir',
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
             style: OutlinedButton.styleFrom(
-              minimumSize: const Size.fromHeight(72),
+              minimumSize: const Size(0, 72),
               foregroundColor: AppColors.textPrimary,
               side: const BorderSide(color: AppColors.divider, width: 1.5),
             ),

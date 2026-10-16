@@ -217,7 +217,7 @@ class _AlertCardState extends ConsumerState<_AlertCard> {
                 child: FilledButton.icon(
                   style: FilledButton.styleFrom(
                     backgroundColor: color,
-                    minimumSize: const Size.fromHeight(44),
+                    minimumSize: const Size(0, 44),
                   ),
                   onPressed: _busy
                       ? null

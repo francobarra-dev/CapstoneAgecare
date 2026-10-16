@@ -119,7 +119,7 @@ class _AssistantScreenState extends ConsumerState<AssistantScreen> {
       appBar: AppBar(
         title: const Text('Asistente IA'),
         bottom: const PreferredSize(
-          preferredSize: Size.fromHeight(1),
+          preferredSize: const Size(0, 1),
           child: Divider(height: 1),
         ),
       ),

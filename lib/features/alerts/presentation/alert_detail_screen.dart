@@ -177,7 +177,7 @@ class _AlertDetailBody extends StatelessWidget {
                 FilledButton.icon(
                   style: FilledButton.styleFrom(
                     backgroundColor: AppColors.critical,
-                    minimumSize: const Size.fromHeight(52),
+                    minimumSize: const Size(0, 52),
                   ),
                   onPressed: onCall,
                   icon: const Icon(Icons.call_rounded),

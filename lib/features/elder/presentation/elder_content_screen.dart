@@ -132,7 +132,7 @@ class _ContentCard extends StatelessWidget {
                     onPressed: () => speech.speak(item.spokenText),
                     style: FilledButton.styleFrom(
                       backgroundColor: item.type.color,
-                      minimumSize: const Size.fromHeight(68),
+                      minimumSize: const Size(0, 68),
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(18)),
                     ),

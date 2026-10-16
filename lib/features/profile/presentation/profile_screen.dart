@@ -239,7 +239,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                   label: const Text('Cerrar sesión',
                       style: TextStyle(color: AppColors.critical)),
                   style: OutlinedButton.styleFrom(
-                    minimumSize: const Size.fromHeight(52),
+                    minimumSize: const Size(0, 52),
                     side: const BorderSide(color: AppColors.critical),
                   ),
                 ),

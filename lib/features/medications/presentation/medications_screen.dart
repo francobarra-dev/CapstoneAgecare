@@ -358,7 +358,7 @@ class _DoseTileState extends ConsumerState<_DoseTile> {
                     icon: const Icon(Icons.check_rounded),
                     label: const Text('Tomada'),
                     style: FilledButton.styleFrom(
-                        minimumSize: const Size.fromHeight(44)),
+                        minimumSize: const Size(0, 44)),
                   ),
                 ),
                 const SizedBox(width: 12),
@@ -368,7 +368,7 @@ class _DoseTileState extends ConsumerState<_DoseTile> {
                     icon: const Icon(Icons.close_rounded),
                     label: const Text('Omitir'),
                     style: OutlinedButton.styleFrom(
-                        minimumSize: const Size.fromHeight(44)),
+                        minimumSize: const Size(0, 44)),
                   ),
                 ),
               ],
