@@ -8,12 +8,15 @@ class AppConfig {
   AppConfig._();
 
   /// true = repositorios en memoria con datos demo (no requiere backend).
+  /// Por defecto true para desarrollo y testing offline; en CI/producción
+  /// se sobrescribe con --dart-define=USE_MOCKS=false.
   static const bool useMocks =
       bool.fromEnvironment('USE_MOCKS', defaultValue: true);
 
   static const String apiBaseUrl = String.fromEnvironment(
     'API_BASE_URL',
-    defaultValue: 'https://api-dev.agecare.app',
+    // defaultValue: 'https://api-dev.agecare.app', // (Endpoint de produccion)
+    defaultValue: 'https://agecare.open-cluster.org', // (Endpoint desarrollo)
   );
 
   /// Application ID de Spike API (https://docs.spikeapi.com).
