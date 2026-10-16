@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
@@ -198,7 +196,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
       setState(() => _busyMedia = true);
       final uploaded = await ref
           .read(uploadServiceProvider)
-          .uploadFile(File(picked.path), kind: 'photo');
+          .uploadFile(picked, kind: 'photo');
       final sent = await ref.read(chatRepositoryProvider).sendMessage(
             _patientId!,
             type: MessageType.photo,

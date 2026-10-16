@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
@@ -104,7 +102,7 @@ class ElderPhotosScreen extends ConsumerWidget {
       showAppSnackBar(context, 'Subiendo la foto...');
       final uploaded = await ref
           .read(uploadServiceProvider)
-          .uploadFile(File(picked.path), kind: 'photo');
+          .uploadFile(picked, kind: 'photo');
       await ref.read(elderRepositoryProvider).addPhoto(
             patientId,
             fileUrl: uploaded.fileUrl,

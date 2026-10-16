@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
@@ -34,6 +35,9 @@ class PushService {
   Future<void> init({required bool enableRemote}) async {
     if (_initialized) return;
     _initialized = true;
+    // En el navegador no hay notificaciones locales ni proyecto Firebase web:
+    // la versión web funciona sin alarmas ni push.
+    if (kIsWeb) return;
 
     const androidInit =
         AndroidInitializationSettings('@mipmap/ic_launcher');
@@ -91,6 +95,7 @@ class PushService {
     // Nota: para disparo exacto se recomienda zonedSchedule con timezone.
     // Aquí usamos show inmediato si la hora ya pasó; en producción usar
     // flutter_local_notifications + timezone para zonedSchedule.
+    if (kIsWeb) return;
     await _local.show(
       id,
       'Hora de tu medicamento',
@@ -100,7 +105,10 @@ class PushService {
     );
   }
 
-  Future<void> cancelDoseReminder(int id) => _local.cancel(id);
+  Future<void> cancelDoseReminder(int id) async {
+    if (kIsWeb) return;
+    await _local.cancel(id);
+  }
 
   NotificationDetails _details(AndroidNotificationChannel ch) => NotificationDetails(
         android: AndroidNotificationDetails(

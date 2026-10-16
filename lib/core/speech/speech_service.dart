@@ -1,7 +1,7 @@
-import 'dart:io';
-
 import 'package:audioplayers/audioplayers.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_picker/image_picker.dart' show XFile;
 import 'package:path_provider/path_provider.dart';
 import 'package:record/record.dart';
 
@@ -32,9 +32,18 @@ class SpeechService {
     if (!await _recorder.hasPermission()) {
       throw StateError('Permiso de micrófono no concedido.');
     }
+    final stamp = DateTime.now().millisecondsSinceEpoch;
+    // En el navegador no hay carpeta temporal ni AAC: se graba WAV en memoria.
+    if (kIsWeb) {
+      _currentPath = 'voice_$stamp.wav';
+      await _recorder.start(
+        const RecordConfig(encoder: AudioEncoder.wav),
+        path: _currentPath!,
+      );
+      return;
+    }
     final dir = await getTemporaryDirectory();
-    _currentPath =
-        '${dir.path}/voice_${DateTime.now().millisecondsSinceEpoch}.m4a';
+    _currentPath = '${dir.path}/voice_$stamp.m4a';
     await _recorder.start(
       const RecordConfig(encoder: AudioEncoder.aacLc),
       path: _currentPath!,
@@ -42,14 +51,16 @@ class SpeechService {
   }
 
   /// Detiene la grabación y devuelve el archivo resultante.
-  Future<File?> stopRecording() async {
+  Future<XFile?> stopRecording() async {
     final path = await _recorder.stop();
     if (path == null) return null;
-    return File(path);
+    // En web, path es una URL blob: el nombre real viene de _currentPath.
+    final name = (_currentPath ?? path).split('/').last;
+    return XFile(path, name: name, mimeType: kIsWeb ? 'audio/wav' : null);
   }
 
   /// Sube el audio y devuelve su URL (para adjuntar a un mensaje).
-  Future<String> uploadVoiceNote(File audio) async {
+  Future<String> uploadVoiceNote(XFile audio) async {
     final uploaded = await _uploads.uploadFile(audio, kind: 'audio');
     return uploaded.fileUrl;
   }
@@ -62,7 +73,7 @@ class SpeechService {
   }
 
   /// Graba, sube y transcribe en un solo paso.
-  Future<({String text, String audioUrl})> recordAndTranscribe(File audio) async {
+  Future<({String text, String audioUrl})> recordAndTranscribe(XFile audio) async {
     final url = await uploadVoiceNote(audio);
     final text = await transcribe(url);
     return (text: text, audioUrl: url);

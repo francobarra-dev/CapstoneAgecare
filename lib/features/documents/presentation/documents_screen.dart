@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
@@ -7,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/network/upload_service.dart';
+import '../../../core/widgets/picked_image.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/widgets/common.dart';
 import '../../patients/application/patients_providers.dart';
@@ -252,7 +251,7 @@ class _UploadSheetState extends ConsumerState<_UploadSheet> {
   final _picker = ImagePicker();
   final _titleCtrl = TextEditingController();
   String _category = 'receta';
-  File? _file;
+  XFile? _file;
   bool _busy = false;
 
   static const _categories = {
@@ -273,7 +272,7 @@ class _UploadSheetState extends ConsumerState<_UploadSheet> {
       final picked = await _picker.pickImage(
           source: source, imageQuality: 90, maxWidth: 2400);
       if (picked == null) return;
-      setState(() => _file = File(picked.path));
+      setState(() => _file = picked);
     } catch (_) {
       if (mounted) {
         showAppSnackBar(context, 'No se pudo obtener el archivo.',
@@ -333,7 +332,7 @@ class _UploadSheetState extends ConsumerState<_UploadSheet> {
           if (_file != null)
             ClipRRect(
               borderRadius: BorderRadius.circular(12),
-              child: Image.file(_file!, height: 140, fit: BoxFit.cover),
+              child: PickedImage(_file!, height: 140, fit: BoxFit.cover),
             ),
           const SizedBox(height: 12),
           Row(

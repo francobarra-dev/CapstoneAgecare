@@ -1,0 +1,47 @@
+name: Web (Vercel)
+
+# Compila la versión web y la publica en Vercel en cada push a main
+# (MVP semanal para Alloxentric). Vercel no tiene Flutter, así que el build
+# se hace aquí y a Vercel solo se sube la carpeta build/web ya compilada.
+#
+# Configuración única en GitHub (Settings -> Secrets and variables -> Actions):
+#   Secrets:   VERCEL_TOKEN, VERCEL_ORG_ID, VERCEL_PROJECT_ID
+#   Variables: API_BASE_URL (opcional; por defecto el backend AgeCare en Azure)
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: vercel-production
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    name: Build web y deploy
+    runs-on: ubuntu-latest
+    env:
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+      API_BASE_URL: ${{ vars.API_BASE_URL || 'https://agecare-api-xnjbc.azurewebsites.net' }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - run: flutter pub get
+
+      - run: >-
+          flutter build web --release --no-wasm-dry-run
+          --dart-define=USE_MOCKS=false
+          --dart-define=API_BASE_URL=${{ env.API_BASE_URL }}
+
+      # Sin el token configurado el build igual se verifica, pero no se publica.
+      - name: Deploy a Vercel
+        if: env.VERCEL_TOKEN != ''
+        run: npx --yes vercel@latest deploy build/web --prod --yes --token "$VERCEL_TOKEN"

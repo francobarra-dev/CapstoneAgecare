@@ -1,8 +1,8 @@
-import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
 
 import 'api_client.dart';
 
@@ -25,12 +25,12 @@ class UploadService {
   final Dio _raw = Dio();
 
   Future<UploadedFile> uploadFile(
-    File file, {
+    XFile file, {
     required String kind, // 'photo' | 'document' | 'audio' | 'prescription'
     String? contentType,
   }) async {
     final bytes = await file.readAsBytes();
-    final name = file.path.split(Platform.pathSeparator).last;
+    final name = file.name;
     return uploadBytes(bytes,
         filename: name, kind: kind, contentType: contentType);
   }
@@ -85,6 +85,14 @@ class UploadService {
         return 'audio/mpeg';
       case 'wav':
         return 'audio/wav';
+      case 'webm':
+        return 'audio/webm';
+      case 'ogg':
+        return 'audio/ogg';
+      case 'webp':
+        return 'image/webp';
+      case 'heic':
+        return 'image/heic';
       default:
         return 'application/octet-stream';
     }

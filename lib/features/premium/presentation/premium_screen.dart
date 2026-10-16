@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
@@ -30,7 +31,8 @@ class PremiumScreen extends ConsumerStatefulWidget {
 class _PremiumScreenState extends ConsumerState<PremiumScreen> {
   static const String _kProductId = 'agecare_premium_monthly';
 
-  final InAppPurchase _iap = InAppPurchase.instance;
+  // La tienda (Play/App Store) no existe en el navegador: en web no se toca el plugin.
+  InAppPurchase get _iap => InAppPurchase.instance;
   StreamSubscription<List<PurchaseDetails>>? _sub;
 
   bool _loading = true;
@@ -43,6 +45,10 @@ class _PremiumScreenState extends ConsumerState<PremiumScreen> {
   @override
   void initState() {
     super.initState();
+    if (kIsWeb) {
+      _init();
+      return;
+    }
     _sub = _iap.purchaseStream.listen(
       _onPurchaseUpdate,
       onError: (e) {
@@ -65,7 +71,7 @@ class _PremiumScreenState extends ConsumerState<PremiumScreen> {
     });
     try {
       // En modo demo no dependemos de la tienda.
-      if (AppConfig.useMocks) {
+      if (AppConfig.useMocks || kIsWeb) {
         setState(() {
           _storeAvailable = false;
           _loading = false;

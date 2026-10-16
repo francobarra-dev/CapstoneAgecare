@@ -1,11 +1,10 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../core/network/upload_service.dart';
+import '../../../core/widgets/picked_image.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/widgets/common.dart';
 import '../application/medications_providers.dart';
@@ -28,7 +27,7 @@ class _PrescriptionScanScreenState
     extends ConsumerState<PrescriptionScanScreen> {
   final _picker = ImagePicker();
 
-  File? _image;
+  XFile? _image;
   bool _scanning = false;
   bool _saving = false;
   String? _error;
@@ -40,7 +39,7 @@ class _PrescriptionScanScreenState
           source: source, imageQuality: 85, maxWidth: 2000);
       if (picked == null) return;
       setState(() {
-        _image = File(picked.path);
+        _image = picked;
         _drafts = null;
         _error = null;
       });
@@ -121,7 +120,7 @@ class _PrescriptionScanScreenState
                 if (_image != null)
                   ClipRRect(
                     borderRadius: BorderRadius.circular(12),
-                    child: Image.file(_image!,
+                    child: PickedImage(_image!,
                         height: 180, fit: BoxFit.cover),
                   )
                 else

@@ -1,11 +1,10 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../core/network/upload_service.dart';
+import '../../../core/widgets/picked_image.dart';
 import '../../../core/widgets/common.dart';
 import '../application/caregiver_providers.dart';
 import '../data/caregiver_repository.dart';
@@ -34,7 +33,7 @@ class _ObservationScreenState extends ConsumerState<ObservationScreen> {
     'General',
   ];
   String? _category;
-  File? _image;
+  XFile? _image;
   bool _saving = false;
 
   Future<void> _pick(ImageSource source) async {
@@ -42,7 +41,7 @@ class _ObservationScreenState extends ConsumerState<ObservationScreen> {
       final picked =
           await _picker.pickImage(source: source, imageQuality: 85, maxWidth: 2000);
       if (picked == null) return;
-      setState(() => _image = File(picked.path));
+      setState(() => _image = picked);
     } catch (_) {
       if (mounted) {
         showAppSnackBar(context, 'No se pudo obtener la imagen.', error: true);
@@ -121,7 +120,7 @@ class _ObservationScreenState extends ConsumerState<ObservationScreen> {
                 children: [
                   ClipRRect(
                     borderRadius: BorderRadius.circular(12),
-                    child: Image.file(_image!,
+                    child: PickedImage(_image!,
                         height: 180,
                         width: double.infinity,
                         fit: BoxFit.cover),
