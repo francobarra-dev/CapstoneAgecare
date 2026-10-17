@@ -23,6 +23,7 @@ import '../../features/health/presentation/manual_vitals_screen.dart';
 import '../../features/marketplace/presentation/caregiver_profile_screen.dart';
 import '../../features/marketplace/presentation/marketplace_screen.dart';
 import '../../features/medications/presentation/agenda_screen.dart';
+import '../../features/medications/presentation/adherence_screen.dart';
 import '../../features/medications/presentation/dose_confirm_screen.dart';
 import '../../features/medications/presentation/medication_plan_screen.dart';
 import '../../features/medications/presentation/prescription_scan_screen.dart';

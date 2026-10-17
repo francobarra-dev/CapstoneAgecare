@@ -166,16 +166,20 @@ class _MedicationAlarmCardState extends ConsumerState<_MedicationAlarmCard> {
                       try {
                         await repo.acknowledge(a.id);
                         ref.invalidate(activeAlertsProvider);
-                        if (mounted)
+                        if (mounted) {
                           showAppSnackBar(context, 'Alarma reconocida');
+                        }
                       } on ApiException catch (e) {
-                        if (mounted)
+                        if (mounted) {
                           showAppSnackBar(context, e.message, error: true);
+                        }
                       } catch (_) {
-                        if (mounted)
+                        if (mounted) {
                           showAppSnackBar(
-                              context, 'No se pudo reconocer la alarma.',
-                              error: true);
+                            context, 'No se pudo reconocer la alarma.',
+                            error: true,
+                          );
+                        }
                       }
                     },
                     icon: const Icon(Icons.done_rounded, size: 18),
@@ -196,16 +200,20 @@ class _MedicationAlarmCardState extends ConsumerState<_MedicationAlarmCard> {
                       try {
                         await repo.resolve(a.id);
                         ref.invalidate(activeAlertsProvider);
-                        if (mounted)
+                        if (mounted) {
                           showAppSnackBar(context, 'Alarma resuelta');
+                        }
                       } on ApiException catch (e) {
-                        if (mounted)
+                        if (mounted) {
                           showAppSnackBar(context, e.message, error: true);
+                        }
                       } catch (_) {
-                        if (mounted)
+                        if (mounted) {
                           showAppSnackBar(
-                              context, 'No se pudo resolver la alarma.',
-                              error: true);
+                            context, 'No se pudo resolver la alarma.',
+                            error: true,
+                          );
+                        }
                       }
                     },
                     icon: const Icon(Icons.task_alt_rounded, size: 18),
