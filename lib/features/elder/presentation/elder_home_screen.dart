@@ -99,6 +99,11 @@ class ElderHomeScreen extends ConsumerWidget {
                       ],
                     ),
                   ),
+                  _SettingsButton(
+                    onLogout: () =>
+                        ref.read(authControllerProvider.notifier).logout(),
+                  ),
+                  const SizedBox(width: 8),
                   _HelpButton(
                     onTap: () => speech.speak(
                       'Esta es tu pantalla de inicio. Toca un botón grande para '
@@ -209,6 +214,56 @@ class _ElderTileButton extends StatelessWidget {
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+/// Acceso discreto a "Cerrar sesión": icono pequeño y confirmación explícita,
+/// para que el adulto mayor no salga de la app por un toque accidental.
+class _SettingsButton extends StatelessWidget {
+  const _SettingsButton({required this.onLogout});
+
+  final VoidCallback onLogout;
+
+  Future<void> _confirm(BuildContext context) async {
+    final ok = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('¿Quieres cerrar sesión?',
+            style: TextStyle(fontSize: 24, fontWeight: FontWeight.w800)),
+        content: const Text(
+          'Necesitarás tu correo y contraseña para volver a entrar.',
+          style: TextStyle(fontSize: 20),
+        ),
+        actionsAlignment: MainAxisAlignment.spaceBetween,
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(false),
+            child: const Text('Cancelar', style: TextStyle(fontSize: 20)),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(true),
+            style: TextButton.styleFrom(foregroundColor: Colors.redAccent),
+            child: const Text('Cerrar sesión', style: TextStyle(fontSize: 20)),
+          ),
+        ],
+      ),
+    );
+    if (ok == true) onLogout();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Semantics(
+      button: true,
+      label: 'Ajustes. Cerrar sesión.',
+      child: IconButton(
+        onPressed: () => _confirm(context),
+        iconSize: 28,
+        color: AppColors.textSecondary,
+        tooltip: 'Cerrar sesión',
+        icon: const Icon(Icons.settings_outlined),
       ),
     );
   }
