@@ -67,3 +67,6 @@ web
 **/android/key.properties
 *.jks
 *.keystore
+
+# Archivos temporales de Office (se crean mientras un documento está abierto)
+~$*

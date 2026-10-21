@@ -50,13 +50,28 @@ AgeCare es el proyecto de capstone para el título de Ingeniero Informático en 
 ## Estructura del Proyecto
 
 ```
-agecare/
-├── docs/              # Documentación del proyecto
-├── src/               # Código fuente
-├── tests/             # Pruebas unitarias e integración
-├── deployment/        # Configuración de despliegue
-└── README.md          # Este archivo
+CapstoneAgecare/
+├── Fase 1/                      # Evidencias Duoc (formato APT122)
+│   ├── Evidencias Individuales/
+│   └── Evidencias Grupales/
+├── Fase 2/
+│   ├── Evidencias Individuales/
+│   ├── Evidencias Grupales/
+│   └── Evidencias Proyecto/     # Presentación, documentación, app y base de datos
+├── Fase 3/
+│   ├── Evidencias Individuales/
+│   └── Evidencias Grupales/
+├── lib/                         # Código fuente de la app (Flutter)
+├── test/                        # Pruebas unitarias y de widgets
+├── android/  ios/  web/         # Plataformas
+├── .github/workflows/           # CI/CD: build Android/iOS y deploy web a Vercel
+└── README.md
 ```
+
+Cada carpeta de evidencias tiene un `README.md` con la lista de archivos que pide Duoc.
+Subir archivos a las carpetas `Fase N/` no ejecuta el CI ni el despliegue.
+
+El backend vive en un repositorio aparte: [agecare-backend](https://github.com/francobarra-dev/agecare-backend).
 
 ---
 
