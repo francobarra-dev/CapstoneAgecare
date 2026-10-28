@@ -1,5 +1,6 @@
 package com.agecare.agecare_app
 
-import io.flutter.embedding.android.FlutterActivity
+import io.flutter.embedding.android.FlutterFragmentActivity
 
-class MainActivity : FlutterActivity()
+// FlutterFragmentActivity: requerido por el paquete `health` para el diálogo de permisos de Health Connect.
+class MainActivity : FlutterFragmentActivity()

@@ -341,7 +341,9 @@ class _WearableCard extends ConsumerWidget {
           final syncText = wearable.lastSyncAt == null
               ? 'sin datos recientes'
               : 'hace ${_ago(DateTime.now().difference(wearable.lastSyncAt!.toLocal()))}';
+          // Tocar la tarjeta abre la vinculación (sincronizar Health Connect, cambiar proveedor).
           return AppCard(
+            onTap: () => context.push('/wearable/link/${selected.patientId}'),
             child: Row(
               children: [
                 Icon(Icons.watch_rounded, color: color),
@@ -377,6 +379,9 @@ class _WearableCard extends ConsumerWidget {
                       style: const TextStyle(
                           fontSize: 13, color: AppColors.textSecondary)),
                 ],
+                const SizedBox(width: 4),
+                const Icon(Icons.chevron_right_rounded,
+                    color: AppColors.textSecondary),
               ],
             ),
           );

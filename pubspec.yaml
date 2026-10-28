@@ -47,6 +47,7 @@ dependencies:
   intl: '>=0.19.0 <0.21.0' # Agregado para evitar conflicto con flutter_localizations
   cupertino_icons: ^1.0.8
   flutter_svg: ^2.0.10
+  health: ^13.3.1
 
 dev_dependencies:
   flutter_test:

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../core/wearable/health_connect_sync.dart';
 import '../auth/application/auth_controller.dart';
 import '../auth/domain/models.dart';
 import '../caregiver/presentation/caregiver_log_screen.dart';
@@ -9,8 +10,10 @@ import '../caregiver/presentation/caregiver_today_screen.dart';
 import '../comms/presentation/comms_screen.dart';
 import '../elder/presentation/elder_home_screen.dart';
 import '../health/presentation/health_screen.dart';
+import '../home/application/home_providers.dart';
 import '../home/presentation/family_home_screen.dart';
 import '../medications/presentation/medications_screen.dart';
+import '../patients/application/patients_providers.dart';
 import 'more_screen.dart';
 import 'patient_selector_bar.dart';
 
@@ -25,8 +28,40 @@ class MainShell extends ConsumerStatefulWidget {
   ConsumerState<MainShell> createState() => _MainShellState();
 }
 
-class _MainShellState extends ConsumerState<MainShell> {
+class _MainShellState extends ConsumerState<MainShell> with WidgetsBindingObserver {
   int _index = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    WidgetsBinding.instance.addPostFrameCallback((_) => _autoSyncWearable());
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) _autoSyncWearable();
+  }
+
+  /// Al abrir la app o volver a ella, envía las lecturas nuevas del reloj
+  /// (Health Connect) y recarga Inicio y Salud si llegó algo.
+  Future<void> _autoSyncWearable() async {
+    try {
+      final result = await ref.read(healthConnectSyncProvider).autoSync();
+      if (!mounted || result == null || result.accepted == 0) return;
+      ref.invalidate(todaySummaryProvider);
+      ref.invalidate(selectedPatientDetailProvider);
+      ref.invalidate(latestVitalsProvider);
+    } catch (e) {
+      debugPrint('Sincronización automática de Health Connect falló: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
